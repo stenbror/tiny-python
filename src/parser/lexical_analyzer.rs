@@ -121,6 +121,7 @@ pub fn lexer(input: &String) -> Result<Vec<Token>, String> {
     Ok(result)
 }
 
+/// Analyze source code for reserved keyword or name literal
 pub fn is_reserved_keyword_or_name(text: &mut Chars, index: u32) -> Option<(Token, u32)> {
     let mut buffer = String::new();
     
@@ -217,8 +218,6 @@ pub fn is_operator_or_delimiter(c1: char, c2: char, c3: char, index: u32) -> Opt
         ('}', _ , _)    => Some((Token::RightCurly(index, index + 1), 1)),
         _ => None
     }
-
-
 }
 
 /// Unittests for Lexical Analyzer module
