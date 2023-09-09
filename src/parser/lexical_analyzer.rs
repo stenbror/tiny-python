@@ -103,7 +103,7 @@ pub fn is_operator_or_delimiter(c1: char, c2: char, c3: char, index: u32) -> Opt
         ('>', '>', '=') => Some((Token::ShiftRightAssign(index, index + 3), 3)),
         ('>', '>', _)   => Some((Token::ShiftRight(index, index + 2), 2)),
         ('>', '=', _)   => Some((Token::GreaterEqual(index, index + 2), 2)),
-        ('>', _ , _)    => Some((Token::ShiftRight(index, index + 1), 1)),
+        ('>', _ , _)    => Some((Token::Greater(index, index + 1), 1)),
         ('+', '=', _)   => Some((Token::PlusAssign(index, index + 2), 2)),
         ('+', _ , _)    => Some((Token::Plus(index, index + 1), 1)),
         ('-', '=', _)   => Some((Token::MinusAssign(index, index + 2), 2)),
@@ -124,6 +124,7 @@ pub fn is_operator_or_delimiter(c1: char, c2: char, c3: char, index: u32) -> Opt
         ('=', _ , _)    => Some((Token::Assign(index, index + 1), 1)),
         (':','=' , _)   => Some((Token::ColonAssign(index, index + 2), 2)),
         (':', _ , _)    => Some((Token::Colon(index, index + 1), 1)),
+        (';', _ , _)    => Some((Token::SemiColon(index, index + 1), 1)),
         ('.','.', '.')  => Some((Token::Elipsis(index, index + 3), 3)),
         ('.', '.', _)   => None,
         ('.', _ , _)    => Some((Token::Dot(index, index + 1), 1)),
@@ -236,6 +237,174 @@ mod tests {
         match res {
             Some((x, y)) => {
                 assert_eq!(x, Token::Mul(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_shift_left_assign() {
+        let res = is_operator_or_delimiter('<', '<', '=', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::ShiftLeftAssign(4, 7));
+                assert_eq!(y, 3);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_shift_left() {
+        let res = is_operator_or_delimiter('<', '<', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::ShiftLeft(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_less_equal() {
+        let res = is_operator_or_delimiter('<', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::LessEqual(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_less() {
+        let res = is_operator_or_delimiter('<', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Less(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_shift_right_assign() {
+        let res = is_operator_or_delimiter('>', '>', '=', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::ShiftRightAssign(4, 7));
+                assert_eq!(y, 3);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_shift_right() {
+        let res = is_operator_or_delimiter('>', '>', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::ShiftRight(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_greater_equal() {
+        let res = is_operator_or_delimiter('>', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::GreaterEqual(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_greater() {
+        let res = is_operator_or_delimiter('>', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Greater(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_equal() {
+        let res = is_operator_or_delimiter('=', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Equal(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_not_equal() {
+        let res = is_operator_or_delimiter('!', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::NotEqual(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_assign() {
+        let res = is_operator_or_delimiter('=', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Assign(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_colon_assign() {
+        let res = is_operator_or_delimiter(':', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::ColonAssign(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_colon() {
+        let res = is_operator_or_delimiter(':', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Colon(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_semicolon() {
+        let res = is_operator_or_delimiter(';', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::SemiColon(4, 5));
                 assert_eq!(y, 1);
             },
             None => assert!(false)
