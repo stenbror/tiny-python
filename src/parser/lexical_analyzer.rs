@@ -1,5 +1,6 @@
 
 use std::str::Chars;
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Token {
@@ -7,6 +8,42 @@ pub enum Token {
     Newline(u32, u32, char, char),
     Indent(u32),
     Dedent(u32),
+
+    False(u32, u32),
+    None(u32, u32),
+    True(u32, u32),
+    And(u32, u32),
+    As(u32, u32),
+    Assert(u32, u32),
+    Async(u32, u32),
+    Await(u32, u32),
+    Break(u32, u32),
+    Class(u32, u32),
+    Continue(u32, u32),
+    Def(u32, u32),
+    Del(u32, u32),
+    Elif(u32, u32),
+    Else(u32, u32),
+    Except(u32, u32),
+    Finbally(u32, u32),
+    For(u32, u32),
+    From(u32, u32),
+    Global(u32, u32),
+    If(u32, u32),
+    Import(u32, u32),
+    In(u32, u32),
+    Is(u32, u32),
+    Lambda(u32, u32),
+    Nonlocal(u32, u32),
+    Not(u32, u32),
+    Or(u32, u32),
+    Pass(u32, u32),
+    Raise(u32, u32),
+    Return(u32, u32),
+    Try(u32, u32),
+    While(u32, u32),
+    With(u32, u32),
+    Yield(u32, u32),
 
     DoubleDivAssign(u32, u32),
     DoubleDiv(u32, u32),
@@ -54,8 +91,13 @@ pub enum Token {
     RightBracket(u32, u32),
     LeftCurly(u32, u32),
     RightCurly(u32, u32),
-    Assign(u32, u32)
+    Assign(u32, u32),
+
+    Name(u32, u32, String),
+    String(u32, u32, Box<Vec<Box<String>>>),
+    Number(u32, u32, String)
 }
+
 
 
 
@@ -80,9 +122,15 @@ pub fn lexer(input: &String) -> Result<Vec<Token>, String> {
     Ok(result)
 }
 
-fn is_reserved_keyword_or_name(text: &mut Chars) -> Result<Token, String> {
-
-    Err("".to_string())
+pub fn is_reserved_keyword_or_name(text: &mut Chars, index: u32) -> Option<(Token, u32)> {
+    let mut buffer = String::new();
+    
+    match buffer.as_str() {
+        "False" => Some((Token::False(index, index + 5), 5)),
+        "None" => Some((Token::None(index, index + 4), 4)),
+        "True" => Some((Token::True(index, index + 4), 4)),
+        _ => None
+    } 
 }
 
 /// Analyzes source code for operators or delimiters.
