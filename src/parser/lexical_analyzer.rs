@@ -1,6 +1,5 @@
 
 use std::str::Chars;
-use std::collections::HashMap;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Token {
@@ -25,7 +24,7 @@ pub enum Token {
     Elif(u32, u32),
     Else(u32, u32),
     Except(u32, u32),
-    Finbally(u32, u32),
+    Finally(u32, u32),
     For(u32, u32),
     From(u32, u32),
     Global(u32, u32),
@@ -126,9 +125,41 @@ pub fn is_reserved_keyword_or_name(text: &mut Chars, index: u32) -> Option<(Toke
     let mut buffer = String::new();
     
     match buffer.as_str() {
-        "False" => Some((Token::False(index, index + 5), 5)),
-        "None" => Some((Token::None(index, index + 4), 4)),
-        "True" => Some((Token::True(index, index + 4), 4)),
+        "False"     => Some((Token::False(index, index + 5), 5)),
+        "None"      => Some((Token::None(index, index + 4), 4)),
+        "True"      => Some((Token::True(index, index + 4), 4)),
+        "and"       => Some((Token::And(index, index + 3), 3)),
+        "as"        => Some((Token::As(index, index + 2), 2)),
+        "assert"    => Some((Token::Assert(index, index + 6), 6)),
+        "async"     => Some((Token::Async(index, index + 5), 5)),
+        "await"     => Some((Token::Await(index, index + 5), 5)),
+        "break"     => Some((Token::Break(index, index + 5), 5)),
+        "class"     => Some((Token::Class(index, index + 5), 5)),
+        "continue"  => Some((Token::Continue(index, index + 8), 8)),
+        "def"       => Some((Token::Def(index, index + 3), 3)),
+        "del"       => Some((Token::Del(index, index + 3), 3)),
+        "elif"      => Some((Token::Elif(index, index + 4), 4)),
+        "else"      => Some((Token::Else(index, index + 4), 4)),
+        "except"    => Some((Token::Except(index, index + 6), 6)),
+        "finally"   => Some((Token::Finally(index, index + 7), 7)),
+        "for"       => Some((Token::For(index, index + 3), 3)),
+        "from"      => Some((Token::From(index, index + 4), 4)),
+        "global"    => Some((Token::Global(index, index + 6), 6)),
+        "if"        => Some((Token::If(index, index + 2), 2)),
+        "import"    => Some((Token::Import(index, index + 6), 6)),
+        "in"        => Some((Token::In(index, index + 2), 2)),
+        "is"        => Some((Token::True(index, index + 2), 2)),
+        "lambda"    => Some((Token::Lambda(index, index + 6), 6)),
+        "nonlocal"  => Some((Token::Nonlocal(index, index + 8), 8)),
+        "not"       => Some((Token::Not(index, index + 3), 3)),
+        "or"        => Some((Token::Or(index, index + 2), 2)),
+        "pass"      => Some((Token::Pass(index, index + 4), 4)),
+        "raise"     => Some((Token::Raise(index, index + 5), 5)),
+        "return"    => Some((Token::Return(index, index + 6), 6)),
+        "try"       => Some((Token::Try(index, index + 3), 3)),
+        "while"     => Some((Token::While(index, index + 5), 5)),
+        "with"      => Some((Token::With(index, index + 4), 4)),
+        "yield"     => Some((Token::Yield(index, index + 5), 5)),
         _ => None
     } 
 }
