@@ -128,6 +128,7 @@ pub fn is_operator_or_delimiter(c1: char, c2: char, c3: char, index: u32) -> Opt
         ('.','.', '.')  => Some((Token::Elipsis(index, index + 3), 3)),
         ('.', '.', _)   => None,
         ('.', _ , _)    => Some((Token::Dot(index, index + 1), 1)),
+        (',', _ , _)    => Some((Token::Comma(index, index + 1), 1)),
         ('~', _ , _)    => Some((Token::BitInvert(index, index + 1), 1)),
         ('(', _ , _)    => Some((Token::LeftParen(index, index + 1), 1)),
         (')', _ , _)    => Some((Token::RightParen(index, index + 1), 1)),
@@ -405,6 +406,234 @@ mod tests {
         match res {
             Some((x, y)) => {
                 assert_eq!(x, Token::SemiColon(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_plus_assign() {
+        let res = is_operator_or_delimiter('+', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::PlusAssign(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_plus() {
+        let res = is_operator_or_delimiter('+', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Plus(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_minus_assign() {
+        let res = is_operator_or_delimiter('-', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::MinusAssign(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_arrow() {
+        let res = is_operator_or_delimiter('-', '>', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Arrow(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_minus() {
+        let res = is_operator_or_delimiter('-', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Minus(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_modulo_assign() {
+        let res = is_operator_or_delimiter('%', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::ModuloAssign(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_modulo() {
+        let res = is_operator_or_delimiter('%', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Modulo(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_decorator_assign() {
+        let res = is_operator_or_delimiter('@', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::DecoratorAssign(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_decorator() {
+        let res = is_operator_or_delimiter('@', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Decorator(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_bit_and_assign() {
+        let res = is_operator_or_delimiter('&', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::BitAndAssign(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_bit_and() {
+        let res = is_operator_or_delimiter('&', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::BitAnd(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_bit_or_assign() {
+        let res = is_operator_or_delimiter('|', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::BitOrAssign(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_bit_or() {
+        let res = is_operator_or_delimiter('|', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::BitOr(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_bit_xor_assign() {
+        let res = is_operator_or_delimiter('^', '=', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::BitXorAssign(4, 6));
+                assert_eq!(y, 2);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_bit_xor() {
+        let res = is_operator_or_delimiter('^', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::BitXor(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_bit_invert() {
+        let res = is_operator_or_delimiter('~', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::BitInvert(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_elipsis() {
+        let res = is_operator_or_delimiter('.', '.', '.', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Elipsis(4, 7));
+                assert_eq!(y, 3);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_dot() {
+        let res = is_operator_or_delimiter('.', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Dot(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_comma() {
+        let res = is_operator_or_delimiter(',', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::Comma(4, 5));
                 assert_eq!(y, 1);
             },
             None => assert!(false)
