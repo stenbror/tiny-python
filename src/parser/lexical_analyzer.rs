@@ -133,9 +133,9 @@ pub fn is_operator_or_delimiter(c1: char, c2: char, c3: char, index: u32) -> Opt
         ('(', _ , _)    => Some((Token::LeftParen(index, index + 1), 1)),
         (')', _ , _)    => Some((Token::RightParen(index, index + 1), 1)),
         ('[', _ , _)    => Some((Token::LeftBracket(index, index + 1), 1)),
-        (']', _ , _)    => Some((Token::RightParen(index, index + 1), 1)),
+        (']', _ , _)    => Some((Token::RightBracket(index, index + 1), 1)),
         ('{', _ , _)    => Some((Token::LeftCurly(index, index + 1), 1)),
-        ('}', _ , _)    => Some((Token::RightParen(index, index + 1), 1)),
+        ('}', _ , _)    => Some((Token::RightCurly(index, index + 1), 1)),
         _ => None
     }
 
@@ -637,6 +637,100 @@ mod tests {
                 assert_eq!(y, 1);
             },
             None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_left_paren() {
+        let res = is_operator_or_delimiter('(', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::LeftParen(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_right_paren() {
+        let res = is_operator_or_delimiter(')', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::RightParen(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_left_bracket() {
+        let res = is_operator_or_delimiter('[', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::LeftBracket(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_right_bracket() {
+        let res = is_operator_or_delimiter(']', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::RightBracket(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_left_curly() {
+        let res = is_operator_or_delimiter('{', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::LeftCurly(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_right_curly() {
+        let res = is_operator_or_delimiter('}', ' ', ' ', 4);
+        match res {
+            Some((x, y)) => {
+                assert_eq!(x, Token::RightCurly(4, 5));
+                assert_eq!(y, 1);
+            },
+            None => assert!(false)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_error_double_dot() {
+        let res = is_operator_or_delimiter('.', '.', ' ', 4);
+        match res {
+            Some(_) => {
+                assert!(false)
+            },
+            None => assert!(true)
+        }
+    }
+
+    #[test]
+    fn operator_or_delimiter_error_unknown_character() {
+        let res = is_operator_or_delimiter('$', ' ', ' ', 4);
+        match res {
+            Some(_) => {
+                assert!(false)
+            },
+            None => assert!(true)
         }
     }
 
